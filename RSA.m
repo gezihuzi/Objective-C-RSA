@@ -165,8 +165,23 @@ static NSData *base64_decode(NSString *str){
 }
 
 + (SecKeyRef)addPrivateKey:(NSString *)key{
-	NSRange spos = [key rangeOfString:@"-----BEGIN RSA PRIVATE KEY-----"];
-	NSRange epos = [key rangeOfString:@"-----END RSA PRIVATE KEY-----"];
+	
+	NSRange spos;
+    	NSRange epos;
+    
+    	if (([key rangeOfString:@"-----BEGIN PRIVATE KEY-----"].location != NSNotFound && [key rangeOfString:@"-----END PRIVATE KEY-----"].location != NSNotFound)) {
+        
+        spos = [key rangeOfString:@"-----BEGIN PRIVATE KEY-----"];
+        epos = [key rangeOfString:@"-----END PRIVATE KEY-----"];
+        
+	}
+    	else if (([key rangeOfString:@"-----BEGIN RSA PRIVATE KEY-----"].location != NSNotFound && [key rangeOfString:@"-----END RSA PRIVATE KEY-----"].location != NSNotFound)) {
+        
+        spos = [key rangeOfString:@"-----BEGIN RSA PRIVATE KEY-----"];
+        epos = [key rangeOfString:@"-----END RSA PRIVATE KEY-----"];
+        
+    	}
+    
 	if(spos.location != NSNotFound && epos.location != NSNotFound){
 		NSUInteger s = spos.location + spos.length;
 		NSUInteger e = epos.location;
